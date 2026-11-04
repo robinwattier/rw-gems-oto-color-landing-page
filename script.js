@@ -269,4 +269,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 150);
   }, { passive: true });
 
+
+  /* ─── PLATFORM DOWNLOAD HANDLER & TOAST FEEDBACK ─── */
+  let toastTimer = null;
+  function showToast(message) {
+    let toast = document.getElementById('platform-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'platform-toast';
+      toast.className = 'toast-notification';
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
+      toast.innerHTML = `
+        <span class="toast-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+        </span>
+        <span class="toast-message"></span>
+      `;
+      document.body.appendChild(toast);
+    }
+
+    const msgSpan = toast.querySelector('.toast-message');
+    if (msgSpan) msgSpan.textContent = message;
+
+    toast.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 4500);
+  }
+
+  const platformButtons = document.querySelectorAll('.panel-night .platform-btn[data-platform]');
+  platformButtons.forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const platform = btn.getAttribute('data-platform');
+      const href = btn.getAttribute('href');
+
+      // Check if file is available via HTTP HEAD (skip on file: protocol)
+      if (href && href !== '#' && location.protocol !== 'file:') {
+        try {
+          const res = await fetch(href, { method: 'HEAD' });
+          if (res.ok) return; // File exists, allow default download
+        } catch (_) {
+          // File not accessible or missing
+        }
+      }
+
+      e.preventDefault();
+      const platformLabel = platform === 'macos' ? 'macOS' : 'Linux';
+      showToast(`Le build pour ${platformLabel} est en cours de préparation. La version Windows (.exe) est disponible dès maintenant !`);
+    });
+  });
+
 });
