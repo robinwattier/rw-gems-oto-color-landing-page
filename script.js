@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const rect = logoWrapper.getBoundingClientRect();
       const localX = ((clientX - rect.left) / rect.width) * 100;
       const clamped = Math.max(0, Math.min(100, localX));
-      logoBlack.style.clipPath = `polygon(${clamped}% 0, 100% 0, 100% 100%, ${clamped}% 100%)`;
+      logoBlack.style.clipPath = `polygon(${clamped}% -50%, 150% -50%, 150% 150%, ${clamped}% 150%)`;
     }
 
     // Panel paper reveal (paper layer revealed on the RIGHT of the divider)
