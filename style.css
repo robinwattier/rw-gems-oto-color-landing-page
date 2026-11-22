@@ -20,6 +20,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'KCY2KBanger';
+  src: url('KCY2KBanger-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ─── DESIGN TOKENS ─── */
 :root {
   /* Colors */
@@ -179,6 +187,12 @@ main {
   font-size: clamp(1.1rem, 3vw, 1.5rem);
   font-weight: 900;
   transition: clip-path 0.1s linear;
+}
+
+.logo-rw {
+  font-family: 'KCY2KBanger', var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .text-white {
